@@ -1,20 +1,24 @@
 package main
 
 import (
-	"golang.org/x/tour/pic"
-	//"math"
+	"golang.org/x/tour/wc"
 )
-func Pic(dx, dy int) [][]uint8 {
-	v := make([][]uint8,dy)
-	for i := range v {
-		v[i] = make([]uint8,dx)
-		for j := range v[i] {
-			v[i][j]=uint8((i+j)/2)
+
+func WordCount(s string) map[string]int {
+	mappa := make(map[string]int)
+	var stringa string
+	for _, c := range s {
+		if c == ' ' {
+			mappa[stringa]++
+			stringa = ""
+		} else {
+			stringa += string(c)
 		}
 	}
-	return v
+	mappa[stringa]++
+	return mappa
 }
 
 func main() {
-	pic.Show(Pic)
+	wc.Test(WordCount)
 }
