@@ -1,21 +1,33 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
-type IPAddr [4]byte
+type ErrNegativeSqrt float64
 
-// TODO: Add a "String() string" method to IPAddr.
+func (e ErrNegativeSqrt) Error() string {
+	return fmt.Sprintf("cannot Sqrt negative number: %v", float64(e))
+}
 
-func (ip IPAddr) String() string {
-	return fmt.Sprintf("%d.%d.%d.%d", ip[0], ip[1], ip[2], ip[3])
+func Sqrt(x float64) (float64, error) {
+	if x < 0 {
+		return 0, ErrNegativeSqrt(x)
+	}
+	z := 1.0
+	for i, prev := 0, z; i < 10; i++ {
+		z -= (z*z - x) / (2 * z)
+		if prev == z {
+			return z, nil
+		}
+		fmt.Println(x, z)
+		prev = z
+	}
+
+	return z, nil
 }
 
 func main() {
-	hosts := map[string]IPAddr{
-		"loopback":  {127, 0, 0, 1},
-		"googleDNS": {8, 8, 8, 8},
-	}
-	for name, ip := range hosts {
-		fmt.Printf("%v: %v\n", name, ip)
-	}
+	fmt.Println(Sqrt(2))
+	fmt.Println(Sqrt(-2))
 }
